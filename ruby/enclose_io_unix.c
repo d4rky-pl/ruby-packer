@@ -53,7 +53,7 @@ static void mkdir_workdir_halt_rm(const wchar_t *sPath)
 	wcscpy(pFrom, sPath);
 	pFrom[len] = 0;
 	pFrom[len + 1] = 0;
-	
+
 	fileop.hwnd = NULL;
 	fileop.wFunc = FO_DELETE;
 	fileop.pFrom = pFrom;
@@ -473,7 +473,7 @@ DIR * enclose_io_fdopendir(int fd)
 	{
 		goto failure;
 	}
-	
+
 	handle = (int *)(squash_global_fdtable.fds[dir->fd]->payload);
 
 	MUTEX_LOCK(&squash_global_mutex);
@@ -640,14 +640,14 @@ int enclose_io_access(const char *path, int mode)
 		ENCLOSE_IO_CONSIDER_MKDIR_WORKDIR_RETURN(
 			enclose_io_expanded,
 			squash_stat(enclose_io_fs, enclose_io_expanded, &buf),
-			access(mkdir_workdir_expanded, &buf)
+			access(mkdir_workdir_expanded, mode)
 		);
 	} else if (enclose_io_is_path(path)) {
 		struct stat buf;
 		ENCLOSE_IO_CONSIDER_MKDIR_WORKDIR_RETURN(
 			path,
 			squash_stat(enclose_io_fs, path, &buf),
-			access(mkdir_workdir_expanded, &buf)
+			access(mkdir_workdir_expanded, mode)
 		);
 	} else {
 		return access(path, mode);
@@ -960,7 +960,7 @@ EncloseIOGetFullPathNameW(
 		memmove(lpBuffer, lpBuffer + 2, (retval - 2) * sizeof(wchar_t));
 		return retval - 2;
 	}
-	
+
 	return retval;
 }
 
@@ -1308,10 +1308,10 @@ int enclose_io_openat(int nargs, int dirfd, const char* pathname, int flags, ...
  * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
  * sell copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
